@@ -1,419 +1,466 @@
-// 获取id
-function id(obj) {
-    return document.getElementById(obj);
-}
-// 增加class名称
-function addClass(obj, sClass) { 
-    var aClass = obj.className.split(' ');
-    if (!obj.className) {
-        obj.className = sClass;
-        return;
-    }
-    for (var i = 0; i < aClass.length; i++) {
-        if (aClass[i] === sClass) return;
-    }
-    obj.className += ' ' + sClass;
-}
+jQuery(document).ready(function($) {
 
-function removeClass(obj, sClass) { 
-    var aClass = obj.className.split(' ');
-    if (!obj.className) return;
-    for (var i = 0; i < aClass.length; i++) {
-        if (aClass[i] === sClass) {
-            aClass.splice(i, 1);
-            obj.className = aClass.join(' ');
-            break;
-        }
-    }
-}
+    /* ---------------------------------------------------------------------- */
+    /*	------------------------------- Loading ----------------------------- */
+    /* ---------------------------------------------------------------------- */
 
-function myBrowser(){
-    var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
-    var isOpera = userAgent.indexOf("Opera") > -1;
-    if (isOpera) {
-        return "Opera"
-    }; //判断是否Opera浏览器
-    if (userAgent.indexOf("Firefox") > -1) {
-        return "FF";
-    } //判断是否Firefox浏览器
-    if (userAgent.indexOf("Chrome") > -1){
-  return "Chrome";
- }
-    if (userAgent.indexOf("Safari") > -1) {
-        return "Safari";
-    } //判断是否Safari浏览器
-    if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) {
-        return "IE";
-    }; //判断是否IE浏览器
-}
+    /*Page Preloading*/
+    $(window).load(function() {
+        $('#spinner').fadeOut(200);
+        $('#preloader').delay(200).fadeOut('slow');
+        $('.wrapper').fadeIn(200);
+        $('#custumize-style').fadeIn(200);
+    });
 
-function view() {
-    return {
-        w: document.documentElement.clientWidth || document.body.clientWidth,
-        h: document.documentElement.clientHeight || document.body.clientHeight
-    };
-}
-var viewHeight=function(){
-	var section=document.getElementsByTagName("section");
-	var iheight=view().h;
-	section[0].style.height=iheight;
-	for (var i = 0; i < section.length; i++) {
-		section[i].style.height=iheight+"px";
+    /* ---------------------------------------------------------------------- */
+    /* ------------------------------- Taps profile ------------------------- */
+    /* ---------------------------------------------------------------------- */
 
-	}
-}
-var waited_develop=function(){
-    var waitedli=document.getElementsByClassName("nav_bar_ul")[0].children;
-    // var waiteda=waitedli.children;
-    console.log(waitedli);
-    // console.log(waiteda);
-    
-    for (var i=1;i<waitedli.length;i++){
-        if(waitedli[i].addEventListener){
-            waitedli[i].addEventListener("click",myfunction,false);
-                function myfunction(){
-            alert("待开发");
+    $('.collapse_tabs').click(function() {
+
+        if ($(this).hasClass('collapsed')) {
+            $(this).find('i.glyphicon').removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-up");
+        } else {
+            $(this).find('i.glyphicon').removeClass("glyphicon-chevron-up").addClass("glyphicon-chevron-down");
         }
 
+    });
+
+    /* ---------------------------------------------------------------------- */
+    /* -------------------------- easyResponsiveTabs ------------------------ */
+    /* ---------------------------------------------------------------------- */
+
+    $('#verticalTab').easyResponsiveTabs({
+        type: 'vertical',
+        width: 'auto',
+        fit: true
+    });
+
+    $("h2.resp-accordion").click(function() {
+        $(this).find(".icon_menu").addClass("icon_menu_active");
+        $("h2.resp-accordion").not(this).find(".icon_menu").removeClass("icon_menu_active");
+
+        /*	Scroll To */
+        $('html, body').animate({scrollTop: $('h2.resp-accordion').offset().top - 50}, 600);
+    });
+
+    $(".resp-tabs-list li").click(function() {
+        $(this).find(".icon_menu").addClass("icon_menu_active");
+        $(".resp-tabs-list li").not(this).find(".icon_menu").removeClass("icon_menu_active");
+    });
+
+
+    $(".resp-tabs-list li").hover(function() {
+        $(this).find(".icon_menu").addClass("icon_menu_hover");
+    }, function() {
+        $(this).find(".icon_menu").removeClass("icon_menu_hover");
+    });
+
+    $("h2.resp-accordion").hover(function() {
+        $(this).find(".icon_menu").addClass("icon_menu_hover");
+    }, function() {
+        $(this).find(".icon_menu").removeClass("icon_menu_hover");
+    });
+
+    /* ---------------------------------------------------------------------- */
+    /* --------------------------- Scroll tabs ------------------------------ */
+    /* ---------------------------------------------------------------------- */
+
+    $(".content_2").mCustomScrollbar({
+        theme: "dark-2",
+        contentTouchScroll: true,
+        advanced: {
+            updateOnContentResize: true,
+            updateOnBrowserResize: true,
+            autoScrollOnFocus: false
         }
-        if(waitedli[i].attachEvent){
-            waitedli[i].attachEvent("onclick",myfunction); 
-            function myfunction(){
-                alert("待开发");
+    });
+
+    /* ---------------------------------------------------------------------- */
+    /* ------------------------- Effect tabs -------------------------------- */
+    /* ---------------------------------------------------------------------- */
+
+    var animation_style = 'bounceIn';
+
+    $('.dropdown-select').change(function() {
+        animation_style = $('.dropdown-select').val();
+    });
+
+
+    $('ul.resp-tabs-list li[class^=tabs-]').click(function() {
+
+        var tab_name = $(this).attr('data-tab-name');
+
+        $('.resp-tabs-container').addClass('animated ' + animation_style);
+        $('.resp-tabs-container').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+            $('.resp-tabs-container').removeClass('animated ' + animation_style);
+        });
+
+        $(".content_2").mCustomScrollbar("destroy");
+        $(".content_2").mCustomScrollbar({
+            theme: "dark-2",
+            contentTouchScroll: true,
+            advanced: {
+                updateOnContentResize: true,
+                updateOnBrowserResize: true,
+                autoScrollOnFocus: false
             }
-        }
-    }
-}
-var tagSwitch=function() 
-{
-	var navP=document.getElementById("nav_bar");
-	var next=document.getElementsByClassName("scroll");
-    var con=document.getElementsByTagName("section");
-    var tag=document.getElementsByTagName("aside")[0].children;
-    con[0].style.display="block";
-    tag[0].className="cur_a";
-    for (var i = 0; i < tag.length; i++) {
-    	tag[i].index=i;
-    	tag[i].onclick=function(){
-    		for (var n = 0; n < tag.length; n++) {
-    			tag[n].className="";
-    			con[n].style.display="none";
-    		}
-    		tag[this.index].className="cur_a";
-    		con[this.index].style.display="block";
-    	}
-    }
-    for (var i = 0; i < next.length; i++) {
-    	next[i].index=i;
-    	tag[i].index=i;
-    	next[i].onclick=function(){
-    		for (var n = 0; n < next.length; n++) {
-    			tag[n].className="";
-    			con[n].style.display="none";
-    		}
-    		con[this.index+1].style.display="block";
-    		tag[this.index+1].className="cur_a";
+        });
 
-    	}
-    }
-}
-// html5--canvas
-var canvashtml5 = document.getElementById("html5").getContext("2d");
-var canvascss3=document.getElementById("css3").getContext("2d");
-var canvasjs=document.getElementById("js").getContext("2d");
-var canvasjq=document.getElementById("jq").getContext("2d");
-var canvasbs=document.getElementById("bs").getContext("2d");
-var canvasps=document.getElementById("ps").getContext("2d");
-var canwidth=160;
-var radius=70;
-var canhtml5=function(){
-	var deg = 0;
-    var html5T = function(deg){
-        var r = deg*Math.PI/180;   
-        canvashtml5.clearRect(0,0,canwidth,canwidth);   
-        canvashtml5.beginPath();  
-        canvashtml5.strokeStyle = "#F1652A"; 
-        canvashtml5.lineWidth = 10; 
-        canvashtml5.arc(canwidth/2,canwidth/2,radius,0-1/2*Math.PI,r-1/2*Math.PI,false); //
-        canvashtml5.stroke();
-    };
-    var time = setInterval(function(){
-    	var con=document.getElementsByTagName("section")[2];
-    	if (con.style.display=="block") {
-    		deg+=4;
-	        html5T(deg);
-	        if(deg>324){
-	            clearInterval(time);
-	        }
-	    }    
-    },20);
-}
-var cancss3=function(){
-	var deg = 0;
-    var css3T = function(deg){
-        var r = deg*Math.PI/180;   
-       	canvascss3.clearRect(0,0,canwidth,canwidth);   
-        canvascss3.beginPath();  
-        canvascss3.strokeStyle = "#409AD8"; 
-        canvascss3.lineWidth = 10; 
-       	canvascss3.arc(canwidth/2,canwidth/2,radius,0-1/2*Math.PI,r-1/2*Math.PI,false); //
-        canvascss3.stroke();
-    };
-    var time = setInterval(function(){
-    	var con=document.getElementsByTagName("section")[2];
-    	if (con.style.display=="block") {
-    		deg+=4;
-	        css3T(deg);
-	        if(deg>324){
-	            clearInterval(time);
-	        }
-	    }    
-    },20);
-}
-var canvasTotal=function(){
+        if (tab_name == "contact")
+            initialize();
 
-}
-var canjs=function(){
-	var deg = 0;
-    var jsT = function(deg){
-        var r = deg*Math.PI/180;   
-        canvasjs.clearRect(0,0,canwidth,canwidth);   
-        canvasjs.beginPath();  
-        canvasjs.strokeStyle = "#ECB12C"; 
-        canvasjs.lineWidth = 10; 
-        canvasjs.arc(canwidth/2,canwidth/2,radius,0-1/2*Math.PI,r-1/2*Math.PI,false); //
-        canvasjs.stroke();
-    };
-    var time = setInterval(function(){
-    	var con=document.getElementsByTagName("section")[2];
-    	if (con.style.display=="block") {
-    		deg+=4;
-	        jsT(deg);
-	        if(deg>252){
-	            clearInterval(time);
-	        }
-	    }    
-    },20);
-}
-var canjq=function(){
-	var deg = 0;
-    var jqT = function(deg){
-        var r = deg*Math.PI/180;   
-        canvasjq.clearRect(0,0,canwidth,canwidth);   
-        canvasjq.beginPath();  
-        canvasjq.strokeStyle = "#75B143"; 
-        canvasjq.lineWidth = 10; 
-        canvasjq.arc(canwidth/2,canwidth/2,radius,0-1/2*Math.PI,r-1/2*Math.PI,false); //
-        canvasjq.stroke();
-    };
-    var time = setInterval(function(){
-    	var con=document.getElementsByTagName("section")[2];
-    	if (con.style.display=="block") {
-    		deg+=4;
-	        jqT(deg);
-	        if(deg>288){
-	            clearInterval(time);
-	        }
-	    }    
-    },20);
-}
-var canbs=function(){
-	var deg = 0;
-    var bsT = function(deg){
-        var r = deg*Math.PI/180;   
-        canvasbs.clearRect(0,0,canwidth,canwidth);   
-        canvasbs.beginPath();  
-        canvasbs.strokeStyle = "#583F85"; 
-        canvasbs.lineWidth = 10; 
-        canvasbs.arc(canwidth/2,canwidth/2,radius,0-1/2*Math.PI,r-1/2*Math.PI,false); //
-        canvasbs.stroke();
-    };
-    var time = setInterval(function(){
-    	var con=document.getElementsByTagName("section")[2];
-    	if (con.style.display=="block") {
-    		deg+=4;
-	        bsT(deg);
-	        if(deg>288){
-	            clearInterval(time);
-	        }
-	    }    
-    },20);
-}
+        return false;
+    });
 
-var ps=function(){
-	var deg = 0;
-    var psT = function(deg){
-        var r = deg*Math.PI/180;   
-        canvasps.clearRect(0,0,canwidth,canwidth);   
-        canvasps.beginPath();  
-        canvasps.strokeStyle = "#031A3A"; 
-        canvasps.lineWidth = 10; 
-        canvasps.arc(canwidth/2,canwidth/2,radius,0-1/2*Math.PI,r-1/2*Math.PI,false); //
-        canvasps.stroke();
-    };
-    var time = setInterval(function(){
-    	var con=document.getElementsByTagName("section")[2];
-    	if (con.style.display=="block") {
-    		deg+=4;
-	        psT(deg);
-	        if(deg>288){
-	            clearInterval(time);
-	        }
-	    }    
-    },20);
-}
+    $("#verticalTab h2.resp-accordion").click(function() {
+        initialize();
+    });
 
-//judge
+    /* ---------------------------------------------------------------------- */
+    /* ---------------------- redimensionnement ----------------------------- */
+    /* ---------------------------------------------------------------------- */
 
+    function redimensionnement() {
 
-var checkUsername=function(){
-	var username=document.getElementById("username").value;
-	var usernamecheck=document.getElementById("check_username");
-	usernamecheck.innerText="";
-	var myreg=/^[\u4e00-\u9fa5 ]{2,20}$/;
-	var myreg1=/^[a-zA-Z\/ ]{2,20}$/;
-	if(username==""||username==null){
-		usernamecheck.innerText="姓名不能为空";
-	}
-	else{
-		if (myreg.test(username)||myreg1.test(username)) {
-		usernamecheck.innerText="";		
-		}
-		else{
-			usernamecheck.innerText="姓名格式错误";
-		}
-	}
-}
-var checkMail=function(){
-	var usermail=document.getElementById("usermail").value;
-	var usermailcheck=document.getElementById("check_usermail");
-	usermailcheck.innerText="";
-	var myreg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
-	if(usermail==""||usermail==null){
-		usermailcheck.innerText="邮箱不能为空";
-	}
-	else{
-		if (myreg.test(usermail)) {
-		usermailcheck.innerText="";		
-		}
-		else{
-			usermailcheck.innerText="邮箱格式错误";
-		}
-	}
-}
-var checkTheme=function(){
-	var usertheme=document.getElementById("usertheme").value;
-	var userthemecheck=document.getElementById("check_usertheme");
-	userthemecheck.innerText="";
-	if(usertheme==""||usertheme==null){
-		userthemecheck.innerText="主题不能为空";
-	}
-}
+        if (window.matchMedia("(max-width: 800px)").matches) {
+            $(".content_2").mCustomScrollbar("destroy");
+            $(".resp-vtabs .resp-tabs-container").css("height", "100%");
+            $(".content_2").css("height", "100%");
+        } else {
 
-var checkCon=function(){
-	var usercon=document.getElementById("usercon").value;
-	var userconcheck=document.getElementById("check_usercon");
-	userconcheck.innerText="";
-	if(usercon==""||usercon==null){
-		userconcheck.innerText="内容不能为空";
-	}
-}
-
-var usernameon=document.getElementById("username");
-usernameon.onblur=checkUsername;
-
-var mymailon=document.getElementById("usermail");
-mymailon.onblur=checkMail;
-
-var mythemeon=document.getElementById("usertheme");
-mythemeon.onblur=checkTheme;
-var myconon=document.getElementById("usercon");
-myconon.onblur=checkCon;
-
-
-
-var scrollFunc = function (e) {
-    var con=document.getElementsByTagName("section");
-        var tag=document.getElementsByTagName("aside")[0].children;  
-    
-    var direct = 0;
-    e = e || window.event;
-    if (e.wheelDelta) {  //判断浏览器IE，谷歌滑轮事件   
-          
-        if (e.wheelDelta > 0) { //当滑轮向上滚动时
-            for (var i = 1; i < tag.length; i++) {
-                if(tag[i].className=="cur_a"){
-                    tag[i].className="";
-                    con[i].style.display="none";
-                    tag[i-1].className="cur_a";
-                    con[i-1].style.display="block";
-                    break;
+            $(".resp-vtabs .resp-tabs-container").css("height", "580px");
+            $(".content_2").css("height", "580px");
+            $(".content_2").mCustomScrollbar("destroy");
+            $(".content_2").mCustomScrollbar({
+                theme: "dark-2",
+                contentTouchScroll: true,
+                advanced: {
+                    updateOnContentResize: true,
+                    updateOnBrowserResize: true,
+                    autoScrollOnFocus: false
                 }
-            }
-        }
-        if (e.wheelDelta < 0) { //当滑轮向下滚动时
-            
-            for (var i = 0; i < tag.length-1; i++) {
-                var n=0;
-                if(tag[i].className=="cur_a"){
-                    tag[i].className="";
-                    con[i].style.display="none";  
-                    n=i+1;
-                    tag[n].className="cur_a";
-                    con[n].style.display="block";
-                    break;
-                }
-            }
+            });
 
         }
-    } else if (e.detail) {  //Firefox滑轮事件
-        if (e.detail> 0) { //当滑轮向上滚动时
-            for (var i = 1; i < tag.length; i++) {
-                if(tag[i].className=="cur_a"){
-                    tag[i].className="";
-                    con[i].style.display="none";
-                    tag[i-1].className="cur_a";
-                    con[i-1].style.display="block";
-                    break;
-                }
-            }
-        }
-        if (e.detail< 0) { //当滑轮向下滚动时
-            for (var i = 0; i < tag.length-1; i++) {
-                var n=0;
-                if(tag[i].className=="cur_a"){
-                    tag[i].className="";
-                    con[i].style.display="none";  
-                    n=i+1;
-                    tag[n].className="cur_a";
-                    con[n].style.display="block";
-                    break;
-                }
-            }
-        }
+
     }
-    // ScrollText(direct);
-}
-// 给页面绑定滑轮滚动事件
-if (document.addEventListener) {
-    document.addEventListener('DOMMouseScroll', scrollFunc, false);
-}
-// //滚动滑轮触发scrollFunc方法
 
-//以下是调用上面的函数
-var browser = myBrowser();
-if ("IE" == browser) {
-    document.onmousewheel = scrollFunc;  
-}else{
-    window.onmousewheel= scrollFunc;  
-}
+    // On lie l'événement resize à la fonction
+    window.addEventListener('load', redimensionnement, false);
+    window.addEventListener('resize', redimensionnement, false);
 
-viewHeight();
-tagSwitch();
-canhtml5();
-cancss3();
-canjs();
-canjq();
-canbs();
-ps();
-waited_develop();
+    $("#verticalTab h2.resp-accordion").click(function() {
+        initialize();
+    });
+
+    /* ---------------------------------------------------------------------- */
+    /* -------------------------- Contact Form ------------------------------ */
+    /* ---------------------------------------------------------------------- */
+
+    // Needed variables
+    var $contactform = $('#contactform'),
+            $success = ' Your message has been sent. Thank you!';
+
+    $contactform.submit(function() {
+        $.ajax({
+            type: "POST",
+            url: "php/contact.php",
+            data: $(this).serialize(),
+            success: function(msg)
+            {
+                var msg_error = msg.split(",");
+                var output_error = '';
+
+                if (msg_error.indexOf('error-message') != -1) {
+                    $("#contact-message").addClass("has-error");
+                    $("#contact-message").removeClass("has-success");
+                    output_error = 'Please enter your message.';
+                } else {
+                    $("#contact-message").addClass("has-success");
+                    $("#contact-message").removeClass("has-error");
+                }
+
+                if (msg_error.indexOf('error-email') != -1) {
+
+                    $("#contact-email").addClass("has-error");
+                    $("#contact-email").removeClass("has-success");
+                    output_error = 'Please enter valid e-mail.';
+                } else {
+                    $("#contact-email").addClass("has-success");
+                    $("#contact-email").removeClass("has-error");
+                }
+
+                if (msg_error.indexOf('error-name') != -1) {
+                    $("#contact-name").addClass("has-error");
+                    $("#contact-name").removeClass("has-success");
+                    output_error = 'Please enter your name.';
+                } else {
+                    $("#contact-name").addClass("has-success");
+                    $("#contact-name").removeClass("has-error");
+                }
+
+
+                if (msg == 'success') {
+
+                    response = '<div class="alert alert-success success-send">' +
+                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                            '<i class="glyphicon glyphicon-ok" style="margin-right: 5px;"></i> ' + $success
+                            + '</div>';
+
+
+                    $(".reset").trigger('click');
+                    $("#contact-name").removeClass("has-success");
+                    $("#contact-email").removeClass("has-success");
+                    $("#contact-message").removeClass("has-success");
+
+                } else {
+
+                    response = '<div class="alert alert-danger error-send">' +
+                            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+                            '<i class="glyphicon glyphicon-remove" style="margin-right: 5px;"></i> ' + output_error
+                            + '</div>';
+
+                }
+                // Hide any previous response text
+                $(".error-send,.success-send").remove();
+                // Show response message
+                $contactform.prepend(response);
+            }
+        });
+        return false;
+    });
+
+    /* ---------------------------------------------------------------------- */
+    /* ----------------------------- Portfolio ------------------------------ */
+    /* ---------------------------------------------------------------------- */
+
+
+    var filterList = {
+        init: function() {
+
+            // MixItUp plugin
+            // http://mixitup.io
+            $('#portfoliolist').mixitup({
+                targetSelector: '.portfolio',
+                filterSelector: '.filter',
+                effects: ['fade'],
+                easing: 'snap',
+                // call the hover effect
+                onMixEnd: filterList.hoverEffect()
+            });
+
+        },
+        hoverEffect: function() {
+
+            // Simple parallax effect
+            $('#portfoliolist .portfolio').hover(
+                    function() {
+                        $(this).find('.label').stop().animate({bottom: 0}, 200);
+                        $(this).find('img').stop().animate({top: -30}, 500);
+                    },
+                    function() {
+                        $(this).find('.label').stop().animate({bottom: -40}, 200);
+                        $(this).find('img').stop().animate({top: 0}, 300);
+                    }
+            );
+
+        }
+
+    };
+
+    // Run the show!
+    filterList.init();
+
+    /* ---------------------------------------------------------------------- */
+    /* ----------------------------- prettyPhoto ---------------------------- */
+    /* ---------------------------------------------------------------------- */
+
+    $("a[rel^='portfolio']").prettyPhoto({
+        animation_speed: 'fast', /* fast/slow/normal */
+        social_tools: '',
+        theme: 'pp_default',
+        horizontal_padding: 5,
+        deeplinking: false,
+    });
+
+
+
+    /* ---------------------------------------------------------------------- */
+    /* ------------------------------ Google Maps --------------------------- */
+    /* ---------------------------------------------------------------------- */
+
+    var map;
+    function initialize() {
+        map = new GMaps({
+            div: '#map',
+            lat: -37.817917,
+            lng: 144.965065,
+            zoom: 16
+
+        });
+        map.addMarker({
+            lat: -37.81792,
+            lng: 144.96506,
+            title: 'Marker with InfoWindow',
+            icon: 'images/pins-map/map-marker.png',
+            infoWindow: {
+                content: '<p>Melbourne Victoria, 300, Australia</p>'
+            }
+        });
+    }
+
+    /* ---------------------------------------------------------------------- */
+    /* --------------------------------- Blog ------------------------------- */
+    /* ---------------------------------------------------------------------- */
+
+    // More blog
+    $('a.read_m').click(function() {
+        var pagina = $(this).attr('href');
+        var postdetail = pagina + '-page';
+
+        if (pagina.indexOf("#post-") != -1) {
+
+            $('#blog-page').hide();
+
+            $(postdetail).show();
+            $(".tabs-blog").trigger('click');
+        }
+
+        return false;
+
+    });
+
+    // More blog
+    $('a.read_more').click(function() {
+        var pagina = $(this).attr('href');
+        var postdetail = pagina + '-page';
+
+        if (pagina.indexOf("#post-") != -1) {
+
+            $('#blog-page').hide();
+
+            $(postdetail).show();
+            $(".tabs-blog").trigger('click');
+        }
+
+        return false;
+
+    });
+
+    //pagination All
+    $('.content-post a').click(function() {
+        var pagina = $(this).attr('href');
+
+        if (pagina == "#blog") {
+
+            $('.content-post').hide();
+            $('#blog-page').show();
+            $(".tabs-blog").trigger('click');
+
+        }
+
+        return false;
+
+    });
+
+    //pagination blog
+    $('.content-post #pagination').click(function() {
+
+
+        var pagina = $(this).attr('href');
+        var postdetail = pagina + '-page';
+
+        if (pagina.indexOf("#post-") != -1) {
+
+            $('#blog-page').hide();
+            $('.content-post').hide();
+
+            $(postdetail).show();
+            $(".tabs-blog").trigger('click');
+        }
+
+        return false;
+
+    });
+
+
+    /* ---------------------------------------------------------------------- */
+    /* ---------------------------- icon menu ------------------------------- */
+    /* ---------------------------------------------------------------------- */
+
+    $(".resp-tabs-container h2.resp-accordion").each(function(){
+			 
+			if($(this).hasClass('resp-tab-active')){
+				$(this).append("<i class='glyphicon glyphicon-chevron-up arrow-tabs'></i>");
+			}else {
+				$(this).append("<i class='glyphicon glyphicon-chevron-down arrow-tabs'></i>");
+			}
+	  });
+	  
+	   $(".resp-tabs-container h2.resp-accordion").click(function(){
+			if($(this).hasClass('resp-tab-active')){
+				$(this).find("i.arrow-tabs").removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-up");
+			}
+			
+			$(".resp-tabs-container h2.resp-accordion").each(function(){
+		 
+				if(!$(this).hasClass('resp-tab-active')){
+					$(this).find("i.arrow-tabs").removeClass("glyphicon-chevron-up").addClass("glyphicon-chevron-down");
+				}
+		  });
+	  
+			
+	  });
+
+
+    /* ---------------------------------------------------------------------- */
+    /* -------------------------------- skillbar ---------------------------- */
+    /* ---------------------------------------------------------------------- */
+
+    $('.tabs-resume').click(function() {
+
+        $('.skillbar').each(function() {
+            $(this).find('.skillbar-bar').width(0);
+        });
+
+        $('.skillbar').each(function() {
+            $(this).find('.skillbar-bar').animate({
+                width: $(this).attr('data-percent')
+            }, 2000);
+        });
+
+    });
+
+    $('#resume').prev('h2.resp-accordion').click(function() {
+
+        $('.skillbar').each(function() {
+            $(this).find('.skillbar-bar').width(0);
+        });
+
+        $('.skillbar').each(function() {
+            $(this).find('.skillbar-bar').animate({
+                width: $(this).attr('data-percent')
+            }, 2000);
+        });
+    });
+	
+		
+	//Change for demo page
+    $('input:radio[name=page_builder]').on('change', function() {
+		
+		$('input:radio[name=page_builder]').each(function () {
+
+			var $this = $(this);
+	
+			if ($(this).prop('checked')) {
+				window.location.replace($this.val());
+			}
+		});
+		
+        return false;
+    });
+
+
+
+});
